@@ -1,1 +1,1 @@
-# serifshop
+# The Serif Shop

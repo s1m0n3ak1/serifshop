@@ -1,0 +1,238 @@
+/* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr,
+acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong,
+sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table,
+caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,  figure, figcaption,
+footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+
+body { line-height: 1; }
+
+ol, ul { list-style: none; }
+
+blockquote, q { quotes: none; }
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+* { box-sizing: border-box; }
+
+/* colors */
+.tc-orange-fluo { color: #FF4E00; }
+.tc-aqua-fluo { color: #00FFA7; }
+.tc-pink-fluo { color: #FF0076; }
+.tc-yellow-fluo { color: #FFB100; }
+
+/* header */
+#main-header {
+    min-height: 50px;
+    width: 100%;
+    display: flex;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    align-items: center;
+    transition: 0.3s ease-in-out;
+}
+
+#main-header h1 {
+    font-family: 'Yellowtail', 'Times New Roman', Times, serif;
+    color: #fff;
+    font-size: 30px;
+    height: 34px;
+    transition: 0.3s ease-in-out;
+    transform-origin: left;
+}
+
+#main-header.fixed {
+    background-color: rgba(0,0,0,0.9);
+    min-height: 30px;
+}
+
+#main-header.fixed h1 {
+    transform: scale(0.7);
+    transform-origin: left;
+}
+
+/* section */
+.container__section {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100vh;
+    background-color: #efefef;
+    background-size: cover;
+    background-position: center center;
+}
+
+.haiku {
+    font-family: 'Passion One', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    width: calc(100% - 190px);
+    padding: 50px 50px 50px 60px;
+    background-color: rgba(0,0,0,0.65);
+}
+
+.haiku__text {
+    font-size: 120px;
+    white-space: pre-wrap;
+    color: #fff;
+    letter-spacing: 0.03em;
+    text-rendering: optimizeLegibility;
+}
+
+.haiku__author {
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 90px;
+}
+
+/* section 01 */
+#section-01 { background-image: url("../assets/images/slide-1-min.jpg"); }
+/* section 02 */
+#section-02 { background-image: url("../assets/images/slide-2-min.jpg"); }
+/* section 03 */
+#section-03 { background-image: url("../assets/images/slide-3-min.jpg"); }
+/* section 04 */
+#section-04 { background-image: url("../assets/images/slide-4-min.jpg"); }
+
+#navigation {
+    position: fixed;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    z-index: 999;
+    top: 0;
+    bottom: 0;
+}
+
+#navigation .bullet {
+    font-family: 'Passion One', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+    border-radius: 8px;
+    border: 2px solid #fff;
+    background-color: transparent;
+    margin: 8px 10px 8px 15px;
+}
+
+#navigation .bullet.active {
+    background-color: #fff;
+}
+
+@media screen and (max-width: 1620px) {
+
+    .haiku__text { font-size: 90px; }
+
+    .haiku__author { font-size: 70px; }
+
+}
+
+@media screen and (max-width: 1200px) {
+
+    .haiku__text { font-size: 70px; }
+
+    .haiku__author { font-size: 55px; }
+
+}
+
+@media screen and (max-width: 960px) {
+
+    .haiku__text { font-size: 60px; }
+
+    .haiku__author { font-size: 45px; }
+
+}
+
+@media screen and (max-width: 768px) {
+    .container__section {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .haiku {
+        width: 100%;
+        padding-left: 120px;
+    }
+
+    .haiku__text { font-size: 50px; }
+
+    .haiku__author { font-size: 40px; }
+
+}
+
+@media screen and (max-width: 700px) {
+
+    .haiku { padding-left: 100px; }
+
+    .haiku__text { font-size: 40px; }
+
+    .haiku__author { font-size: 30px; }
+
+}
+
+@media screen and (max-width: 580px) {
+
+    .haiku { padding-left: 80px; }
+
+    .haiku__text { font-size: 35px; }
+
+    .haiku__author { font-size: 30px; }
+
+}
+
+@media screen and (max-width: 500px) {
+
+    .haiku { padding-left: 70px; }
+
+    .haiku__text { font-size: 30px; }
+
+    .haiku__author { font-size: 25px; }
+
+}
+
+@media screen and (max-width: 440px) {
+
+    #main-header { justify-content: center; }
+
+    #main-header.fixed h1 { transform-origin: center; }
+
+    .haiku__author,
+    .haiku__text {
+        display: block;
+        text-align: center;
+    }
+
+    .haiku__text { font-size: 26px; }
+
+    .haiku__author { font-size: 20px; }
+
+}
+
+@media screen and (max-width: 390px) {
+
+    .haiku { padding: 40px 20px 40px 60px; }
+
+    .haiku__text { font-size: 22px; }
+
+    .haiku__author { font-size: 18px; }
+
+}
