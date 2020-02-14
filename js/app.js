@@ -1,118 +1,114 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // here we select all the haikus and set a var and we select
-    // and store in a var the <nav> element then we create the virtual
-    // elements ul and the fragment
-    const haikus = document.querySelectorAll('.container__section');
+    // variables
+    const slides = document.querySelectorAll('.container__section');
     const nav = document.querySelector('#navigation');
+    const backTopButton = document.querySelector('.back-to-top');
+    const header = document.querySelector('#main-header');
+
+    let windowH = window.innerHeight;
+    let topOffset = window.scrollY;
+    let navHide = false;
+    let currentActive = 0;
+    let current = Math.floor(topOffset / windowH + 0.5);
+
+    // helper functions
+    const addClass = (arr, link, nameOfClass) => arr[link].classList.add(nameOfClass);
+    const removeClass = (arr, link, nameOfClass) => arr[link].classList.remove(nameOfClass);
+    const removeClasses = (arr, nameOfClass) => [...Array(arr.length).keys()].forEach(link => removeClass(arr, link, nameOfClass));
+    const fixHeader = (pos) => pos > 0 ? header.classList.add('sticky') : header.classList.remove('sticky');
+
+    // helper function to activate / deactivate the navigation bullet
+    const setClearTimeout = (intvalTarget, hideTarget, variable) => {
+        intvalTarget.clearInterval(variable);
+        hideTarget.classList.remove('hidden');
+        navHide = intvalTarget.setTimeout(() => {
+            hideTarget.classList.add('hidden');
+        }, 3000);
+    }
+
+    // creating ul and document fragment
     const ul = document.createElement('ul');
     const fragment = document.createDocumentFragment();
 
-    // we store the initial viewport height
-    let windowH = window.innerHeight;
-
     // build the nav
-    haikus.forEach((item, index) => {
-
-        // creating the virtual element <li>
+    slides.forEach((item, index) => {
         const newBullet = document.createElement('li');
 
-        // here we set the attribute data-scroll with the increasing index
-        // starting from 0 in order to scroll top in when we'll use .scrollTo
-        // and we add a class '.bullet' to select these elements later on
         newBullet.setAttribute('data-scroll', `${ index }`);
         newBullet.classList.add('bullet');
-        
+
         // we add an Event Listener to each navigation bullet
-        newBullet.addEventListener('click', (e) => {
-            // on click we find out what is the index to scroll we set up just before
-            // with attribute 'data-scroll', which we can select opening the event.target.dataset
-            // and parsing the attribute value from a string to a number
-            const idx = parseInt(e.target.dataset.scroll);
+        newBullet.addEventListener('click', e => {
+            const idx = item.attributes['data-anchestor'].value;
+            let topScroll = 0;
+
+            topScroll = item.offsetTop;
+            removeClasses(slides, 'highlighted');
+            addClass(slides, idx, 'highlighted');
             
-            // once we have the scroll index we can calculate the amount of scroll we need
-            // by multiplying the viewport height (windowH) for the parsed number we selected
-            // from the target dataset additionally we can specify, which kind of animation we want
-            window.scrollTo({
-                top: windowH * idx,
-                behavior: 'smooth'
-            })
+            window.scrollTo({ top: topScroll, behavior: 'smooth' });
         });
 
-        // after have defined all the attributes for each bullet, we append
-        // the populated elements to the virtual fragment defined before
         fragment.appendChild(newBullet);
     });
 
-    // here we append the fragmet to the ul and finally 
-    // we attach the whole element to the DOM node <nav>
     ul.appendChild(fragment);
     nav.appendChild(ul);
-  
-    // definition of the variables to count 'slides' and select all the navigation 'bullets'
-    const slides = document.querySelectorAll('.container__section');
-    const menuLinks = document.querySelectorAll('.bullet');
-    // here we store in a var the header container
-    const header = document.querySelector('#main-header');
-    
-    // here we select all the slides from the DOM and we just create an array of numbers 
-    // which we'll iterate to remove the precedently selected bullet
-    const keyArr = [...Array(slides.length).keys()];    
-    
-    // helper functions to activate / deactivate the navigational bullet
-    const addActive = (link) => menuLinks[link].classList.add('active');
-    const removeActive = (link) => menuLinks[link].classList.remove('active');
-    const removeActives = () => keyArr.forEach(link => removeActive(link));
-    // with this function we add a class to the main header
-    // and by scrolling the header will change style
-    const fixHeader = (pos) => pos > 0 ? header.classList.add('fixed') : header.classList.remove('fixed');
-    
-    // changeable variables: amount of vertical scroll and the definition of which
-    // navigation bullet is currently selected (set to 0 as initial value)
-    let topPos = window.scrollY;
-    let currentActive = 0;
-    let current = Math.floor(topPos / windowH + 0.5);
 
-    // by using the addActive function we set the first navigation bullet 
-    addActive(currentActive);
+    // definition of the variables to count 'slides' and select all the navigation 'bullets'
+    const menuLinks = document.querySelectorAll('.bullet');
+
+    // by using the addClass function we set the first navigation bullet and highlight the first slide
+    addClass(menuLinks, currentActive, 'active');
+    addClass(slides, currentActive, 'highlighted');
 
     // in case there's a resize event (the device orientation changes included)
     // we redefine the windowH and the we update the navigation bullet activation
     window.addEventListener('resize', () => {
-
         // constant update of the vertical scroll position and calculation
         // to obtain an int to be passed to the function addActive()
         windowH = window.innerHeight;
-        current = Math.floor(topPos / windowH + 0.5);
+        current = slides.length - [...slides].reverse().findIndex((s) => window.scrollY >= s.offsetTop - (windowH / 2)) - 1
 
-        // here we use all the functions we need to update which bullet is selected
-        // before defining which bullet is selected addActives() we update
-        // the 'currentActive' to be equal to the value of 'current'
         if (current !== currentActive) {
-            removeActives();
+            removeClasses(slides, 'highlighted');
+            removeClasses(menuLinks, 'active');
             currentActive = current;
-            addActive(current);
+            addClass(slides, current, 'highlighted');
+            addClass(menuLinks, current, 'active');
         }
-    });
-    
-    // we listen for the window scroll event
-    window.addEventListener('scroll', () => {
 
+        if (topOffset > windowH) backTopButton.classList.remove('hidden');
+        else backTopButton.classList.add('hidden');
+    });
+
+    window.addEventListener('mousemove', () => setClearTimeout(window, nav, navHide));
+
+    window.addEventListener('scroll', (e) => {
         // constant update of the vertical scroll position and calculation
         // to obtain an int to be passed to the function addActive()
-        topPos = window.scrollY;        
-        current = Math.floor(topPos / windowH + 0.5);
-        
-        // update the header during the scrolling event
-        fixHeader(topPos);
-        
-        // here we use all the functions we need to update which bullet is selected
-        // before defining which bullet is selected addActives() we update
-        // the 'currentActive' to be equal to the value of 'current'
+        topOffset = window.scrollY;
+        current = slides.length - [...slides].reverse().findIndex((s) => window.scrollY >= s.offsetTop - (windowH / 2)) - 1
+
+        fixHeader(topOffset);
+
         if (current !== currentActive) {
-            removeActives();
+            removeClasses(slides, 'highlighted');
+            removeClasses(menuLinks, 'active');
             currentActive = current;
-            addActive(current);
+            addClass(slides, current, 'highlighted');
+            addClass(menuLinks, current, 'active');
         }
+
+        // handling of backTop button: if top
+        if (topOffset > windowH) backTopButton.classList.remove('hidden');
+        else backTopButton.classList.add('hidden');
+
+        setClearTimeout(window, nav, navHide);
     });
+
+    backTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
 }, false);
