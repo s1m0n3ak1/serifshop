@@ -1,4 +1,4 @@
-# The Serif Shop
+# The Haiku Shop
 
 Just a simple project with fullscreen slides, a scroll inspector and navigation bullets.
 
